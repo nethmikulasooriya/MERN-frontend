@@ -14,7 +14,7 @@ export default function AdminPage() {
       {/* Main Content Area */}
       <div className="h-full w-[calc(100%-300px)] bg-amber-400">
         <Routes path="/*">
-          <Route path="/products" element={<h1>Products</h1>} /> //load sidebar component with products list
+          <Route path="/products" element={<h1>AdminProductPage</h1>} /> //load sidebar component with products list
           <Route path="/users" element={<h1>Users</h1>} />
           <Route path="/orders" element={<h1>Orders</h1>} />
           <Route path="/reviews" element={<h1>Reviews</h1>} />

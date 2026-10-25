@@ -8,13 +8,14 @@ export default function LoginPage() {
 
   async function handleLogin() {
     try {
-      const response = await axios.post("http://localhost:5000/users/login", {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_URL+"/api/users/login", {
         email: email,
         password: password,
       });
       //alert("Login Successful")
       toast.success("Login Successful");
       console.log(response.data);
+      LocalStorage.setItem("token",response.data.token)
     } catch (e) {
       toast.error(e.response?.data?.message || "Unable to connect to the login service.");
     }
