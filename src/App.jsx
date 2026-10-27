@@ -28,3 +28,6 @@ function App() {
 }
 
 export default App;
+//https://nprdehrnljcraitludsj.supabase.co/rest/v1/
+
+//
