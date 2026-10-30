@@ -1,4 +1,6 @@
 import { Link, Route, Routes } from "react-router-dom";
+import AddProductPage from "./Admin/addProduct";
+import AdminProductsPage from "./Admin/adminProductPage";
 
 export default function AdminPage() {
   return (
@@ -13,11 +15,12 @@ export default function AdminPage() {
 
       {/* Main Content Area */}
       <div className="h-full w-[calc(100%-300px)] bg-amber-400">
-        <Routes path="/*">
-          <Route path="/products" element={<h1>AdminProductPage</h1>} /> //load sidebar component with products list
-          <Route path="/users" element={<h1>Users</h1>} />
-          <Route path="/orders" element={<h1>Orders</h1>} />
-          <Route path="/reviews" element={<h1>Reviews</h1>} />
+        <Routes>
+          <Route path="products" element={<AdminProductsPage />} />
+          <Route path="users" element={<h1>Users</h1>} />
+          <Route path="orders" element={<h1>Orders</h1>} />
+          <Route path="reviews" element={<h1>Reviews</h1>} />
+          <Route path="add-product" element={<AddProductPage />} />
         </Routes>
       </div>
     </div>
