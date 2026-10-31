@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast'; // or your configured toast library
 import axios from 'axios';
 import mediaUpload from '../../utils/mediaUpload';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddProductPage() {
   const [productId, setProductId] = useState('');
@@ -13,7 +14,7 @@ export default function AddProductPage() {
   const [labelledPrice, setLabelledPrice] = useState(0);
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
-  navigate = useNavigate();
+  const navigate = useNavigate();
 
   async function AddProduct(){
 
