@@ -16,7 +16,7 @@ export default function ProductCard({ product, isAdmin, onDelete }) {
     "https://via.placeholder.com/300x200?text=No+Image";
 
   return (
-    <div className="relative flex flex-col justify-between w-[280px] min-h-[420px] m-4 bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <Link to={"/overview/"+product.productId} className="relative flex flex-col justify-between w-[280px] min-h-[420px] m-4 bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
       {/* Top Image & Badge */}
       <div className="relative w-full h-48 bg-gray-50 flex items-center justify-center overflow-hidden">
         <img
@@ -111,6 +111,6 @@ export default function ProductCard({ product, isAdmin, onDelete }) {
           </button>
         )}
       </div>
-    </div>
+    </Link>
   );
 }

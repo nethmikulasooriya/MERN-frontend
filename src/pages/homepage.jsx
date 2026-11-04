@@ -6,12 +6,13 @@ export default function HomePage() {
     <div className="w-full h-screen flex flex-col items-center">
       <Header />
       <div className="w-full h-[calc(100vh-80px)] flex flex-col items-center">
-        <Routes path="/*">
+        <Routes>
           <Route path="/" element={<h1>Home</h1>} />
           <Route path="/products" element={<h1>ProductPage</h1>} />
           <Route path="/about" element={<h1>About</h1>} />
           <Route path="/contact" element={<h1>Contact</h1>} />
-          <Route path="/*" element={<h1>404 Not Found</h1>} />
+          <Route path="/overview/:id" element={<ProductOverview />} />
+          <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </div>
     </div>
