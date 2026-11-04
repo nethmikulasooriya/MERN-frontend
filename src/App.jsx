@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import HomePage from "./pages/homepage";
 import RegisterPage from "./pages/register";
 import AddProductPage from "./pages/Admin/addProduct";
+import ProductPage from "./client/productPage";
 
 function App() {
   return (
@@ -21,9 +22,10 @@ function App() {
           <Route path="/add-product" element={<AddProductPage />} />
           <Route path="/admin/*" element={<AdminPage />} />
           <Route path="/test/*" element={<TestPage />} />
-          <Route path="/register/*" element={<RegisterPage/>} />
-          <Route path="/*" element={<h1>HomePage</h1>} />
+          <Route path="/register/*" element={<RegisterPage />} />
           <Route path="/admin-products" element={<AdminPage />} />
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </div>
     </BrowserRouter>
