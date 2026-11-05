@@ -9,6 +9,7 @@ import RegisterPage from "./pages/register";
 import AddProductPage from "./pages/Admin/addProduct";
 import ProductPage from "./client/productPage";
 import ProductOverviewPage from "./client/productOverview";
+import CartPage from "./client/cart";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/register/*" element={<RegisterPage />} />
           <Route path="/admin-products" element={<AdminPage />} />
           <Route path="/products" element={<ProductPage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route
             path="/overview/:productId"
             element={<ProductOverviewPage />}

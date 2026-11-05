@@ -2,7 +2,8 @@ const CART_STORAGE_KEY = "cart";
 
 export function getCart() {
   const storedCart = localStorage.getItem(CART_STORAGE_KEY);
-  if (!storedCart) {
+  if (storedCart === null) {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify([]));
     return [];
   }
 
@@ -11,12 +12,17 @@ export function getCart() {
     throw new Error("Stored cart must be an array.");
   }
 
-  return cart;
+  return cart.map((item) => {
+    if (item.qty === undefined && item.quantity !== undefined) {
+      return { ...item, qty: item.quantity };
+    }
+    return item;
+  });
 }
 
-export function addToCart(product, quantity = 1) {
-  if (!product || !Number.isInteger(quantity) || quantity < 1) {
-    throw new Error("A product and a positive integer quantity are required.");
+export function addToCart(product, qty = 1) {
+  if (!product || !Number.isInteger(qty) || qty === 0) {
+    throw new Error("A product and a non-zero integer quantity are required.");
   }
 
   const productId = product.productId || product._id;
@@ -28,11 +34,30 @@ export function addToCart(product, quantity = 1) {
   const existingItem = cart.find((item) => item.productId === productId);
 
   if (existingItem) {
-    existingItem.quantity += quantity;
-  } else {
-    cart.push({ ...product, productId, quantity });
+    const newQty = (existingItem.qty ?? 0) + qty;
+    if (newQty <= 0) {
+      removeFromCart(productId);
+      return cart.filter((item) => item.productId !== productId);
+    }
+    existingItem.qty = newQty;
+  } else if (qty > 0) {
+    cart.push({
+      productId,
+      name: product.name,
+      image: product.images?.[0] || product.image || "",
+      price: product.price,
+      labelledPrice: product.labelledPrice ?? product.labeledPrice,
+      qty,
+    });
   }
 
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
   return cart;
+}
+
+export function removeFromCart(productId) {
+  const cart = getCart();
+  const updatedCart = cart.filter((item) => item.productId !== productId);
+  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updatedCart));
+  return updatedCart;
 }
