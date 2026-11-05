@@ -8,6 +8,7 @@ import HomePage from "./pages/homepage";
 import RegisterPage from "./pages/register";
 import AddProductPage from "./pages/Admin/addProduct";
 import ProductPage from "./client/productPage";
+import ProductOverviewPage from "./client/productOverview";
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
           <Route path="/register/*" element={<RegisterPage />} />
           <Route path="/admin-products" element={<AdminPage />} />
           <Route path="/products" element={<ProductPage />} />
+          <Route
+            path="/overview/:productId"
+            element={<ProductOverviewPage />}
+          />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </div>
