@@ -111,7 +111,9 @@ export default function CartPage() {
           type="button"
           className="absolute left-2.5 w-50 text-2xl md:text-md md:w-37.5 h-12.5 cursor-pointer rounded-lg shadow-2xl bg-accent border-2 border-accent text-white hover:bg-white hover:text-accent"
           onClick={() => {
-            navigate("/checkout", { state: { items: cart } });
+            navigate("/checkout", {
+              state: { items: cart, fromCart: true },
+            });
           }}
         >
           Checkout
