@@ -10,7 +10,7 @@ import AddProductPage from "./pages/Admin/addProduct";
 import ProductPage from "./client/productPage";
 import ProductOverviewPage from "./client/productOverview";
 import CartPage from "./client/cart";
-import CheckoutPage from "./client/checkOut";
+import CheckoutPage from "./client/checkOutPage";
 
 function App() {
   return (
