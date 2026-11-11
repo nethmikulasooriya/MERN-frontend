@@ -1,37 +1,37 @@
-import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import AddProductPage from "./Admin/addProduct";
 import AdminProductsPage from "./Admin/adminProductPage";
 import EditProductPage from "./Admin/editProduct";
 
 export default function AdminPage() {
+  const location = useLocation();
+  const path = location.pathname;
+
+  function getClass(name) {
+    if (path.includes(name)) {
+      return "bg-accent text-white p-4";
+    } else {
+      return "text-accent p-4";
+    }
+  }
+
   return (
-    <div className="w-full h-screen flex">
-      {/* Sidebar */}
-      <div className="h-full w-75 shrink-0 bg-blue-900 flex flex-col text-white p-4 gap-2">
-        <Link to="/admin/products" className="p-2 hover:bg-blue-800 rounded">
-          Products
-        </Link>
-        <Link to="/admin/users" className="p-2 hover:bg-blue-800 rounded">
-          Users
-        </Link>
-        <Link to="/admin/orders" className="p-2 hover:bg-blue-800 rounded">
-          Orders
-        </Link>
-        <Link to="/admin/reviews" className="p-2 hover:bg-blue-800 rounded">
-          Reviews
-        </Link>
+    <div className="w-full h-screen flex bg-accent">
+      <div className="h-full w-75 text-accent font-bold text-xl flex flex-col bg-white">
+        <Link className={getClass("products")} to="/admin/products">Products</Link>
+        <Link className={getClass("users")} to="/admin/users">Users</Link>
+        <Link className={getClass("orders")} to="/admin/orders">Orders</Link>
+        <Link className={getClass("reviews")} to="/admin/reviews">Reviews</Link>
       </div>
 
-      {/* Main Content Area */}
-      <div className="h-full min-w-0 flex-1 bg-amber-400 p-4">
+      <div className="h-full flex-1 border-accent border-4 rounded-xl bg-white">
         <Routes>
-          <Route index element={<Navigate to="products" replace />} />
-          <Route path="products" element={<AdminProductsPage />} />
-          <Route path="products/add" element={<AddProductPage />} />
-          <Route path="products/edit" element={<EditProductPage />} />
-          <Route path="users" element={<h1>Users</h1>} />
-          <Route path="orders" element={<h1>Orders</h1>} />
-          <Route path="reviews" element={<h1>Reviews</h1>} />
+          <Route path="/products" element={<AdminProductsPage />} />
+          <Route path="/users" element={<h1>Users</h1>} />
+          <Route path="/orders" element={<h1>AdminOrdersPage</h1>} />
+          <Route path="/reviews" element={<h1>Reviews</h1>} />
+          <Route path="/add-product" element={<AddProductPage />} />
+          <Route path="/edit-product" element={<EditProductPage />} />
         </Routes>
       </div>
     </div>
