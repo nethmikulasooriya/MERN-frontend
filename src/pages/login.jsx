@@ -1,8 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,10 +15,9 @@ export default function LoginPage() {
         email: email,
         password: password,
       });
-      //alert("Login Successful")
+      localStorage.setItem("token", response.data.token);
       toast.success("Login Successful");
-      console.log(response.data);
-      LocalStorage.setItem("token",response.data.token)
+      navigate(location.state?.from || "/products", { replace: true });
     } catch (e) {
       toast.error(e.response?.data?.message || "Unable to connect to the login service.");
     }
