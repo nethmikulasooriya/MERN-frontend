@@ -17,7 +17,8 @@ function normalizeItem(item) {
 export default function CheckoutPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const fromCart = location.state?.fromCart === true;
+  const fromCart =
+    location.state?.fromCart === true || location.pathname === "/cart";
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -34,7 +35,10 @@ export default function CheckoutPage() {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Please login to checkout");
-      navigate("/login", { replace: true });
+      navigate("/login", {
+        replace: true,
+        state: { from: location },
+      });
       return;
     }
 
@@ -59,12 +63,12 @@ export default function CheckoutPage() {
     return () => {
       isCurrent = false;
     };
-  }, [navigate]);
+  }, [location, navigate]);
 
   useEffect(() => {
     if (cart.length === 0) {
       toast.error("Please select items to checkout");
-      navigate("/cart", { replace: true });
+      navigate("/products", { replace: true });
     }
   }, [cart.length, navigate]);
 
@@ -107,7 +111,7 @@ export default function CheckoutPage() {
       toast.error("Your cart is empty");
       return;
     }
-    if (!name.trim() || !address.trim() || !phone.trim()) {
+    if (!address.trim() || !phone.trim()) {
       toast.error("Please fill all the fields");
       return;
     }
@@ -146,111 +150,111 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="w-full max-w-full min-h-screen flex flex-col px-2.5 py-10 items-center">
-      <h1 className="text-3xl font-bold mb-4">Checkout</h1>
-      {cart.map((item) => (
-        <div
-          key={item.productId}
-          className="w-full md:w-200 min-h-25 m-2.5 p-2 shadow-2xl flex flex-row items-center relative"
+    <main className="min-h-screen px-4 py-10">
+      <h1 className="sr-only">Checkout</h1>
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.8fr)]">
+        <section className="flex flex-col gap-4" aria-label="Cart items">
+          {cart.map((item) => (
+            <div
+              key={item.productId}
+              className="flex min-h-25 w-full items-center gap-3 p-3 shadow-xl"
+            >
+              <img
+                src={item.image || ""}
+                alt={item.name || "Product"}
+                className="h-20 w-20 shrink-0 rounded-xl object-cover"
+              />
+              <div className="min-w-0 flex-1">
+                <span className="block truncate font-bold">
+                  {item.name || "Product"}
+                </span>
+                <span className="font-semibold">
+                  {item.price.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+              <div className="flex shrink-0 items-center">
+                <button
+                  type="button"
+                  aria-label={`Decrease ${item.name || "product"} quantity`}
+                  className="h-8 w-8 rounded-lg bg-accent text-white hover:bg-blue-400"
+                  onClick={() => updateQuantity(item, -1)}
+                >
+                  -
+                </button>
+                <span className="mx-2">{item.quantity}</span>
+                <button
+                  type="button"
+                  aria-label={`Increase ${item.name || "product"} quantity`}
+                  className="h-8 w-8 rounded-lg bg-accent text-white hover:bg-blue-400"
+                  onClick={() => updateQuantity(item, 1)}
+                >
+                  +
+                </button>
+              </div>
+              <span className="hidden w-28 shrink-0 text-right font-semibold sm:block">
+                {(item.quantity * item.price).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+              <button
+                type="button"
+                aria-label={`Remove ${item.name || "product"}`}
+                className="shrink-0 cursor-pointer text-red-700"
+                onClick={() => updateQuantity(item, -item.quantity)}
+              >
+                <TbTrash className="text-xl" />
+              </button>
+            </div>
+          ))}
+        </section>
+
+        <aside
+          className="w-full"
+          aria-label={name ? `Order for ${name}` : "Place order"}
         >
-          <div className="w-25 flex justify-center items-center">
-            <img
-              src={item.image || ""}
-              alt={item.name || "Product"}
-              className="w-20 h-20 object-cover"
-            />
-          </div>
-          <div className="flex-1 flex flex-col justify-center px-2">
-            <span className="font-bold">{item.name || "Product"}</span>
-            <span className="font-semibold">
-              {item.price.toLocaleString("en-US", {
+          <p className="mb-6 text-right text-xl font-bold">
+            Total:{" "}
+            <span className="text-accent">
+              {getTotal().toLocaleString("en-US", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
             </span>
-          </div>
-          <div className="flex items-center">
+          </p>
+          <div className="flex flex-col gap-3 p-3 shadow-xl">
+            <input
+              className="h-10 w-full rounded-lg border border-gray-300 p-2.5"
+              type="tel"
+              placeholder="Phone Number"
+              aria-label="Phone number"
+              autoComplete="tel"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+            />
+            <input
+              className="h-10 w-full rounded-lg border border-gray-300 p-2.5"
+              type="text"
+              placeholder="Address"
+              aria-label="Address"
+              autoComplete="street-address"
+              value={address}
+              onChange={(event) => setAddress(event.target.value)}
+            />
             <button
               type="button"
-              aria-label={`Decrease ${item.name || "product"} quantity`}
-              className="w-7.5 rounded-lg bg-accent text-white hover:bg-blue-400"
-              onClick={() => updateQuantity(item, -1)}
+              onClick={placeOrder}
+              disabled={isSubmitting || cart.length === 0}
+              className="mx-auto mt-2 h-10 rounded-lg border-2 border-accent bg-accent px-4 font-semibold text-white hover:bg-white hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
             >
-              -
-            </button>
-            <span className="mx-2.5">{item.quantity}</span>
-            <button
-              type="button"
-              aria-label={`Increase ${item.name || "product"} quantity`}
-              className="w-7.5 rounded-lg bg-accent text-white hover:bg-blue-400"
-              onClick={() => updateQuantity(item, 1)}
-            >
-              +
+              {isSubmitting ? "Placing order..." : "Place Order"}
             </button>
           </div>
-          <div className="w-32.5 flex justify-end pr-2 font-semibold">
-            {(item.quantity * item.price).toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </div>
-          <button
-            type="button"
-            aria-label={`Remove ${item.name || "product"}`}
-            className="ml-1 cursor-pointer text-red-700"
-            onClick={() => updateQuantity(item, -item.quantity)}
-          >
-            <TbTrash className="text-xl" />
-          </button>
-        </div>
-      ))}
-
-      <div className="md:w-200 w-full m-2.5 p-2.5 shadow-2xl flex flex-row items-center justify-between">
-        <button
-          type="button"
-          onClick={placeOrder}
-          disabled={isSubmitting || cart.length === 0}
-          className="w-50 md:w-37.5 h-12.5 rounded-lg shadow-2xl bg-accent border-2 border-accent text-white hover:bg-white hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isSubmitting ? "Placing order..." : "Place Order"}
-        </button>
-        <span className="font-bold text-xl">
-          Total:{" "}
-          {getTotal().toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
-        </span>
+        </aside>
       </div>
-
-      <div className="md:w-200 w-full m-2.5 p-2.5 shadow-2xl flex flex-col md:flex-row items-center justify-center gap-2">
-        <input
-          className="w-full md:w-50 h-10 border border-gray-300 rounded-lg p-2.5"
-          type="text"
-          placeholder="Enter your name"
-          aria-label="Name"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-        <input
-          className="w-full md:w-50 h-10 border border-gray-300 rounded-lg p-2.5"
-          type="text"
-          placeholder="Enter your address"
-          aria-label="Address"
-          autoComplete="street-address"
-          value={address}
-          onChange={(event) => setAddress(event.target.value)}
-        />
-        <input
-          className="w-full md:w-50 h-10 border border-gray-300 rounded-lg p-2.5"
-          type="tel"
-          placeholder="Enter your phone number"
-          aria-label="Phone number"
-          autoComplete="tel"
-          value={phone}
-          onChange={(event) => setPhone(event.target.value)}
-        />
-      </div>
-    </div>
+    </main>
   );
 }
