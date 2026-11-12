@@ -12,6 +12,52 @@ export default function AdminOrdersPage() {
   const [clickedOrder, setClickedOrder] = useState(null);
   const [orderStatus, setOrderStatus] = useState("pending");
   const [orderNotes, setOrderNotes] = useState("");
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+
+  async function updateOrderStatus(updatedValue) {
+    const orderId =
+      clickedOrder?.orderID || clickedOrder?.orderId || clickedOrder?._id;
+    const token = localStorage.getItem("token");
+
+    if (!orderId) {
+      toast.error("Unable to identify this order");
+      return;
+    }
+
+    if (!token) {
+      toast.error("Please login first");
+      return;
+    }
+
+    setUpdatingStatus(true);
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/orders/${orderId}/${updatedValue}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setOrderStatus(updatedValue);
+      setClickedOrder((order) => ({ ...order, status: updatedValue }));
+      setOrders((currentOrders) =>
+        currentOrders.map((order) =>
+          (order.orderID || order.orderId || order._id) === orderId
+            ? { ...order, status: updatedValue }
+            : order
+        )
+      );
+      toast.success("Order status updated successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Failed to update order status");
+    } finally {
+      setUpdatingStatus(false);
+    }
+  }
 
   useEffect(() => {
     if (loading) {
@@ -211,7 +257,8 @@ export default function AdminOrdersPage() {
                 <select
                   className="mt-1 block w-full rounded-lg border border-slate-300 bg-white p-2 font-normal"
                   value={orderStatus}
-                  onChange={(e) => setOrderStatus(e.target.value)}
+                  disabled={updatingStatus}
+                  onChange={(e) => updateOrderStatus(e.target.value)}
                 >
                   <option value="pending">Pending</option>
                   <option value="completed">Completed</option>
