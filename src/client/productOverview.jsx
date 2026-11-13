@@ -35,13 +35,13 @@ export default function ProductOverviewPage() {
   }, [params.productId]);
 
   return (
-    <div className="w-full h-full">
+    <main className="min-h-screen w-full">
       {status === "loading" && <Loader />}
 
       {status === "success" && product && (
-        <div className="w-full h-full flex flex-col md:flex-row">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-4 pb-8 md:min-h-screen md:flex-row md:items-center md:gap-8 md:px-8">
           {/* Mobile Title */}
-          <h1 className="text-2xl my-4 text-center font-bold md:hidden">
+          <h1 className="my-4 break-words text-center text-2xl font-bold md:hidden">
             {product.name}{" "}
             {product.altNames?.length > 0 && (
               <span className="font-light">
@@ -51,14 +51,14 @@ export default function ProductOverviewPage() {
           </h1>
 
           {/* Left Column: Image Slider */}
-          <div className="w-full md:w-[49%] h-full flex flex-col justify-center items-center pt-6 md:pt-8">
+          <div className="flex w-full justify-center md:w-1/2">
             <ImageSlider images={product.images || []} />
           </div>
 
           {/* Right Column: Product Details */}
-          <div className="w-full md:w-[49%] h-full flex flex-col items-center pt-12.5">
+          <div className="flex w-full flex-col items-center md:w-1/2 md:py-8">
             {/* Desktop Title */}
-            <h1 className="text-2xl font-bold hidden md:block">
+            <h1 className="hidden break-words text-center text-2xl font-bold md:block">
               {product.name}{" "}
               {product.altNames?.length > 0 && (
                 <span className="font-light">
@@ -67,18 +67,20 @@ export default function ProductOverviewPage() {
               )}
             </h1>
 
-            <p className="text-lg p-2">{product.description}</p>
+            <p className="w-full break-words p-2 text-base leading-relaxed sm:text-lg">
+              {product.description}
+            </p>
 
             {/* Pricing Section */}
-            <div className="w-full flex flex-col items-center mt-5">
+            <div className="mt-5 flex w-full flex-col items-center">
               {Number.isFinite(currentPrice) && (
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
                   {hasDiscount && (
-                    <span className="text-2xl font-medium text-gray-500 line-through">
+                    <span className="text-xl font-medium text-gray-500 line-through sm:text-2xl">
                       {labelledPrice.toFixed(2)}
                     </span>
                   )}
-                  <span className="text-3xl font-bold text-blue-900">
+                  <span className="text-2xl font-bold text-blue-900 sm:text-3xl">
                     {currentPrice.toFixed(2)}
                   </span>
                 </div>
@@ -86,7 +88,7 @@ export default function ProductOverviewPage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="w-full flex flex-row justify-center items-center mt-5 gap-2.5">
+            <div className="mt-5 flex w-full max-w-md flex-col items-stretch justify-center gap-2.5 sm:flex-row">
               <button
                 type="button"
                 onClick={() => {
@@ -104,7 +106,7 @@ export default function ProductOverviewPage() {
                     },
                   });
                 }}
-                className="w-50 h-12.5 cursor-pointer rounded-xl shadow-2xl text-white bg-blue-900 border-[3px] border-blue-900 transition-colors hover:bg-white hover:text-blue-900"
+                className="h-12.5 w-full flex-1 cursor-pointer rounded-xl border-[3px] border-blue-900 bg-blue-900 text-white shadow-2xl transition-colors hover:bg-white hover:text-blue-900"
               >
                 Buy Now
               </button>
@@ -120,7 +122,7 @@ export default function ProductOverviewPage() {
                     toast.error("Unable to add product to cart.");
                   }
                 }}
-                className="w-50 h-12.5 cursor-pointer rounded-xl shadow-2xl text-white bg-blue-600 border-[3px] border-blue-600 transition-colors hover:bg-white hover:text-blue-600"
+                className="h-12.5 w-full flex-1 cursor-pointer rounded-xl border-[3px] border-blue-600 bg-blue-600 text-white shadow-2xl transition-colors hover:bg-white hover:text-blue-600"
               >
                 Add to Cart
               </button>
@@ -134,6 +136,6 @@ export default function ProductOverviewPage() {
           Error loading product.
         </div>
       )}
-    </div>
+    </main>
   );
 }
