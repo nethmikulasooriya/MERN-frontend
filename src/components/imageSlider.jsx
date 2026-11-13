@@ -6,19 +6,19 @@ export default function ImageSlider(props) {
   const currentImage = images[currentIndex];
 
   return (
-    <div className="w-125 h-150">
+    <div className="w-full max-w-[500px] px-4 md:px-0">
       {currentImage ? (
         <img
           src={currentImage}
           alt={`Product image ${currentIndex + 1}`}
-          className="w-full h-125 object-cover rounded-3xl"
+          className="aspect-[4/3] w-full rounded-3xl object-cover"
         />
       ) : (
-        <div className="w-full h-125 flex items-center justify-center rounded-3xl bg-gray-100 text-gray-500">
+        <div className="flex aspect-[4/3] w-full items-center justify-center rounded-3xl bg-gray-100 text-gray-500">
           No images available
         </div>
       )}
-      <div className="w-full h-25 flex justify-center items-center">
+      <div className="flex w-full items-center justify-start overflow-x-auto py-2 md:justify-center">
         {images.map((image, index) => (
           <button
             key={`${image}-${index}`}
@@ -26,7 +26,7 @@ export default function ImageSlider(props) {
             aria-label={`View product image ${index + 1}`}
             aria-pressed={index === currentIndex}
             onClick={() => setCurrentIndex(index)}
-            className="m-2 h-22.5 w-22.5 cursor-pointer overflow-hidden rounded-2xl hover:border-4 hover:border-accent"
+            className="m-1 h-16 w-16 shrink-0 cursor-pointer overflow-hidden rounded-xl hover:border-4 hover:border-accent sm:m-2 sm:h-20 sm:w-20"
           >
             <img
               src={image}
