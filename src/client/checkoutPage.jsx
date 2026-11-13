@@ -150,19 +150,19 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-10">
+    <main className="min-h-screen px-3 py-6 sm:px-4 sm:py-10">
       <h1 className="sr-only">Checkout</h1>
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.8fr)]">
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-6 sm:gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.8fr)]">
         <section className="flex flex-col gap-4" aria-label="Cart items">
           {cart.map((item) => (
             <div
               key={item.productId}
-              className="flex min-h-25 w-full items-center gap-3 p-3 shadow-xl"
+              className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 p-3 shadow-xl sm:flex sm:min-h-25 sm:gap-3"
             >
               <img
                 src={item.image || ""}
                 alt={item.name || "Product"}
-                className="h-20 w-20 shrink-0 rounded-xl object-cover"
+                className="h-16 w-16 shrink-0 rounded-xl object-cover sm:h-20 sm:w-20"
               />
               <div className="min-w-0 flex-1">
                 <span className="block truncate font-bold">
@@ -175,7 +175,7 @@ export default function CheckoutPage() {
                   })}
                 </span>
               </div>
-              <div className="flex shrink-0 items-center">
+              <div className="col-start-1 row-start-2 flex shrink-0 items-center sm:col-auto sm:row-auto">
                 <button
                   type="button"
                   aria-label={`Decrease ${item.name || "product"} quantity`}
@@ -194,7 +194,7 @@ export default function CheckoutPage() {
                   +
                 </button>
               </div>
-              <span className="hidden w-28 shrink-0 text-right font-semibold sm:block">
+              <span className="col-start-3 row-start-2 shrink-0 text-right text-sm font-semibold sm:ml-auto sm:block sm:w-28 sm:text-base">
                 {(item.quantity * item.price).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -203,7 +203,7 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 aria-label={`Remove ${item.name || "product"}`}
-                className="shrink-0 cursor-pointer text-red-700"
+                className="col-start-3 row-start-1 shrink-0 cursor-pointer justify-self-end text-red-700 sm:col-auto sm:row-auto"
                 onClick={() => updateQuantity(item, -item.quantity)}
               >
                 <TbTrash className="text-xl" />
@@ -216,7 +216,7 @@ export default function CheckoutPage() {
           className="w-full"
           aria-label={name ? `Order for ${name}` : "Place order"}
         >
-          <p className="mb-6 text-right text-xl font-bold">
+          <p className="mb-4 text-right text-lg font-bold sm:mb-6 sm:text-xl">
             Total:{" "}
             <span className="text-accent">
               {getTotal().toLocaleString("en-US", {
