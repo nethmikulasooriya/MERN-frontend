@@ -10,9 +10,11 @@ import AddProductPage from "./pages/Admin/addProduct";
 import ProductPage from "./client/productPage";
 import ProductOverviewPage from "./client/productOverview";
 import CheckoutPage from "./client/checkoutPage";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
+    <GoogleOAuthProvider clientId="60928684691-47kpae31691eqpe43runs6kbk7hmsv14.apps.googleusercontent.com">
     <BrowserRouter>
       <div>
         <Toaster position="top-right"/>
@@ -37,6 +39,7 @@ function App() {
         </Routes>
       </div>
     </BrowserRouter>
+    </GoogleOAuthProvider>
   );
 }
 
