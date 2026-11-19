@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GrGoogle } from "react-icons/gr";
 import { useGoogleLogin } from "@react-oauth/google";
 
@@ -104,6 +104,12 @@ export default function LoginPage() {
             value={password}
             className="w-75 h-12.5 px-4 border border-[#c3efe9] rounded-[20px] my-5 outline-none"
           />
+          <Link
+            className="w-75 -mt-3 mb-4 text-right text-sm text-blue-700 hover:underline"
+            to="/forget"
+          >
+            Forgot password?
+          </Link>
           <button
             type="submit"
             disabled={isLoading}
