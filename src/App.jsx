@@ -10,6 +10,7 @@ import AddProductPage from "./pages/Admin/addProduct";
 import ProductPage from "./client/productPage";
 import ProductOverviewPage from "./client/productOverview";
 import CheckoutPage from "./client/checkoutPage";
+import ForgetPasswordPage from "./client/forgetPassword";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/products" element={<ProductPage />} />
           <Route path="/cart" element={<CheckoutPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/forget" element={<ForgetPasswordPage />} />
           <Route
             path="/overview/:productId"
             element={<ProductOverviewPage />}
