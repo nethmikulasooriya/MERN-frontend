@@ -42,6 +42,9 @@ export default function Header() {
         <Link to="/contact" className="text-xl font-bold mx-2">
           Contact
         </Link>
+        <Link to="/search" className="text-xl font-bold mx-2">
+          Search
+        </Link>
       </nav>
 
       <Link
