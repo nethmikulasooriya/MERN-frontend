@@ -105,7 +105,7 @@ export default function LoginPage() {
             className="w-75 h-12.5 px-4 border border-[#c3efe9] rounded-[20px] my-5 outline-none"
           />
           <Link
-            className="w-75 -mt-3 mb-4 text-right text-sm text-blue-700 hover:underline"
+            className="w-75 -mt-3 mb-4 text-center text-sm text-teal-700 hover:text-teal-900 hover:underline"
             to="/forget"
           >
             Forgot password?
@@ -129,6 +129,15 @@ export default function LoginPage() {
               {isGoogleLoading ? "Logging in..." : "Login with Google"}
             </span>
           </button>
+          <p className="w-75 text-center text-sm text-gray-700">
+            Don&apos;t have an account?{" "}
+            <Link
+              className="font-medium text-teal-700 hover:text-teal-900 hover:underline"
+              to="/signup"
+            >
+              Sign up
+            </Link>
+          </p>
         </form>
       </div>
     </div>
