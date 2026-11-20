@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const usersApi = `${import.meta.env.VITE_BACKEND_URL}/api/users`;
 
@@ -11,9 +11,9 @@ export default function ForgetPasswordPage() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailSent, setEmailSent] = useState(false);
-  const [resetComplete, setResetComplete] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const navigate = useNavigate();
 
   async function sendOTP(event) {
     event.preventDefault();
@@ -60,8 +60,8 @@ export default function ForgetPasswordPage() {
         otp,
         newPassword,
       });
-      setResetComplete(true);
       toast.success("Password reset successfully.");
+      navigate("/login");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to reset password.");
     } finally {
@@ -77,19 +77,7 @@ export default function ForgetPasswordPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[url('/login.jpg')] bg-cover bg-center px-4 py-8">
       <section className="w-full max-w-md rounded-3xl bg-white/95 p-8 shadow-2xl sm:p-10">
-        {resetComplete ? (
-          <div className="flex flex-col items-center gap-5 text-center">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Password reset
-            </h1>
-            <p className="text-gray-600">
-              Your password has been changed successfully.
-            </p>
-            <Link className={buttonClassName} to="/login">
-              Go to login
-            </Link>
-          </div>
-        ) : !emailSent ? (
+        {!emailSent ? (
           <form className="flex flex-col gap-5" onSubmit={sendOTP}>
             <div className="text-center">
               <h1 className="text-2xl font-bold text-gray-900">
