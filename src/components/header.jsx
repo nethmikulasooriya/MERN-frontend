@@ -6,8 +6,18 @@ import { useState } from "react";
 
 export default function Header() {
   const navigate = useNavigate();
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [sideDrawerOpened, setSideDrawerOpened] = useState(false);
   const closeDrawer = () => setSideDrawerOpened(false);
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+    setToken(null);
+    closeDrawer();
+    navigate("/");
+  }
 
   return (
     <header className="relative z-50 flex h-20 w-full shrink-0 items-center px-2 shadow-2xl md:px-4">
@@ -45,6 +55,19 @@ export default function Header() {
         <Link to="/search" className="text-xl font-bold mx-2">
           Search
         </Link>
+        {token === null ? (
+          <Link to="/login" className="text-xl font-bold mx-2">
+            Login
+          </Link>
+        ) : (
+          <button
+            type="button"
+            className="text-xl font-bold mx-2"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        )}
       </nav>
 
       <Link
@@ -60,7 +83,7 @@ export default function Header() {
 
       {sideDrawerOpened && (
         <div
-          className="fixed inset-0 z-[60] flex bg-black/40 md:hidden"
+          className="fixed inset-0 z-60 flex bg-black/40 md:hidden"
           onClick={closeDrawer}
         >
           <nav
@@ -91,6 +114,23 @@ export default function Header() {
             <Link to="/cart" onClick={closeDrawer} className="rounded px-3 py-3 text-lg font-bold">
               Cart
             </Link>
+            {token === null ? (
+              <Link
+                to="/login"
+                onClick={closeDrawer}
+                className="rounded px-3 py-3 text-lg font-bold"
+              >
+                Login
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded px-3 py-3 text-left text-lg font-bold"
+              >
+                Logout
+              </button>
+            )}
             <div className="mt-4 border-t pt-4">
               <UserData />
             </div>
