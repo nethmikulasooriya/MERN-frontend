@@ -1,4 +1,12 @@
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import {
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import Loading from "../components/loader";
 import AddProductPage from "./Admin/addProduct";
 import AdminProductsPage from "./Admin/adminProductPage";
 import EditProductPage from "./Admin/editProduct";
@@ -6,7 +14,22 @@ import AdminOrdersPage from "./Admin/adminOrdersPage";
 
 export default function AdminPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const path = location.pathname;
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+  const hasAdminAccess = Boolean(token && role === "admin");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login", { replace: true });
+      return;
+    }
+
+    if (role !== "admin") {
+      navigate("/login", { replace: true });
+    }
+  }, [navigate, role, token]);
 
   function getClass(name) {
     if (path.includes(name)) {
@@ -14,6 +37,14 @@ export default function AdminPage() {
     } else {
       return "text-accent p-4";
     }
+  }
+
+  if (!hasAdminAccess) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
   }
 
   return (
