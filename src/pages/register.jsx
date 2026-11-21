@@ -28,6 +28,7 @@ export default function RegisterPage() {
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", response.data.role || "user");
 
         if (response.data.role === "admin") {
           navigate("/admin/");
@@ -49,13 +50,13 @@ export default function RegisterPage() {
 
       {/* Right side form card */}
       <div className="w-[50%] h-full flex justify-center items-center">
-        <div className="w-[500px] min-h-[600px] py-10 backdrop-blur-md rounded-[20px] shadow-xl flex flex-col justify-center items-center">
+        <div className="w-125 min-h-150 py-10 backdrop-blur-md rounded-[20px] shadow-xl flex flex-col justify-center items-center">
           <input
             type="text"
             placeholder="First Name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className="w-[300px] h-[50px] px-4 border border-[#c3efe9] rounded-[20px] my-[10px] outline-none"
+            className="w-75 h-12.5 px-4 border border-[#c3efe9] rounded-[20px] my-2.5 outline-none"
           />
 
           <input
@@ -63,7 +64,7 @@ export default function RegisterPage() {
             placeholder="Last Name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className="w-[300px] h-[50px] px-4 border border-[#c3efe9] rounded-[20px] my-[10px] outline-none"
+            className="w-75 h-12.5 px-4 border border-[#c3efe9] rounded-[20px] my-2.5 outline-none"
           />
 
           <input
@@ -71,7 +72,7 @@ export default function RegisterPage() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-[300px] h-[50px] px-4 border border-[#c3efe9] rounded-[20px] my-[10px] outline-none"
+            className="w-75 h-12.5 px-4 border border-[#c3efe9] rounded-[20px] my-2.5 outline-none"
           />
 
           <input
@@ -79,12 +80,12 @@ export default function RegisterPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-[300px] h-[50px] px-4 border border-[#c3efe9] rounded-[20px] my-[10px] outline-none"
+            className="w-75 h-12.5 px-4 border border-[#c3efe9] rounded-[20px] my-2.5 outline-none"
           />
 
           <button
             onClick={handleRegister}
-            className="w-[300px] h-[50px] cursor-pointer bg-[#c3efe9] rounded-[20px] mt-[20px] font-medium hover:opacity-90 transition-opacity"
+            className="w-75 h-12.5 cursor-pointer bg-[#c3efe9] rounded-[20px] mt-5 font-medium hover:opacity-90 transition-opacity"
           >
             Register
           </button>
