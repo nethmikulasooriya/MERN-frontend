@@ -1,31 +1,34 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import Loading from "../components/loader";
 import ProductCard from "../components/ProductCard";
 
 export default function SearchProductPage() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [requestId, setRequestId] = useState(0);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     let isCurrentRequest = true;
 
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/api/products`)
-      .then((res) => {
-        if (!Array.isArray(res.data)) {
+      .then((response) => {
+        if (!Array.isArray(response.data)) {
           throw new Error("The products API returned an invalid response.");
         }
         if (isCurrentRequest) {
-          setProducts(res.data);
+          setProducts(response.data);
           setError("");
         }
       })
       .catch((requestError) => {
-        console.error("Unable to load products:", requestError);
         if (isCurrentRequest) {
-          setError("Could not load products. Check that the backend server is running, then try again.");
+          toast.error("Error fetching products");
+          console.error("Unable to load products for search:", requestError);
+          setError("Could not load products. Please try again later.");
         }
       })
       .finally(() => {
@@ -37,34 +40,54 @@ export default function SearchProductPage() {
     return () => {
       isCurrentRequest = false;
     };
-  }, [requestId]);
+  }, []);
+
+  const searchQuery = query.trim().toLowerCase();
+  const filteredProducts = products.filter((product) =>
+    [
+      product.name,
+      product.description,
+      ...(Array.isArray(product.altNames) ? product.altNames : []),
+    ].some(
+      (field) =>
+        typeof field === "string" && field.toLowerCase().includes(searchQuery),
+    ),
+  );
 
   return (
-    <div className="w-full h-full flex flex-wrap justify-center items-center">
-      {isLoading && <p role="status">Loading products...</p>}
-      {!isLoading && error && (
-        <div className="flex flex-col items-center gap-3 text-center">
-          <p role="alert" className="text-red-600">{error}</p>
-          <button
-            type="button"
-            onClick={() => {
-              setIsLoading(true);
-              setRequestId((currentId) => currentId + 1);
-            }}
-            className="rounded bg-blue-900 px-4 py-2 text-white"
-          >
-            Retry
-          </button>
-        </div>
-      )}
-      {!isLoading && !error && products.length === 0 && (
-        <p>No products found.</p>
-      )}
-      {!isLoading &&
-        !error &&
-        products.map((product) => (
-          <ProductCard key={product.productId || product._id} product={product} />
-        ))}
+    <div className="w-full h-full flex flex-col items-center p-4">
+      <input
+        type="search"
+        placeholder="Search for products..."
+        aria-label="Search for products"
+        className="w-75 h-10 px-4 mb-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent"
+        value={query}
+        onChange={(event) => {
+          setQuery(event.target.value);
+        }}
+      />
+      <div className="w-full h-full flex flex-row flex-wrap justify-center items-center">
+        {!query.trim() ? (
+          <h1 className="text-2xl text-secondary font-semibold">
+            Please enter a search query
+          </h1>
+        ) : isLoading ? (
+          <Loading />
+        ) : error ? (
+          <p role="alert" className="text-red-600">
+            {error}
+          </p>
+        ) : filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <ProductCard
+              key={product.productId || product._id}
+              product={product}
+            />
+          ))
+        ) : (
+          <p className="text-secondary">No products found.</p>
+        )}
+      </div>
     </div>
   );
 }
