@@ -35,6 +35,7 @@ export default function SignUpPage() {
       toast.success("Registration successful.");
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", response.data.role || "user");
         navigate(response.data.role === "admin" ? "/admin/" : "/");
       } else {
         navigate("/login");
