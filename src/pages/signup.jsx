@@ -9,6 +9,7 @@ export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPasswords, setShowPasswords] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -111,9 +112,10 @@ export default function SignUpPage() {
           <input
             id="signup-password"
             className={inputClassName}
-            type="password"
+            type={showPasswords ? "text" : "password"}
             autoComplete="new-password"
             placeholder="Password"
+     
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
@@ -125,13 +127,22 @@ export default function SignUpPage() {
           <input
             id="signup-confirm-password"
             className={inputClassName}
-            type="password"
+            type={showPasswords ? "text" : "password"}
             autoComplete="new-password"
             placeholder="Confirm password"
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
             required
           />
+
+          <button
+            type="button"
+            aria-pressed={showPasswords}
+            className="self-center text-sm font-medium text-teal-700 hover:text-teal-900 hover:underline"
+            onClick={() => setShowPasswords((showing) => !showing)}
+          >
+            {showPasswords ? "Hide passwords" : "Show passwords"}
+          </button>
 
           <button
             className="mt-2 w-full rounded-[20px] bg-[#c3efe9] px-4 py-3 font-medium transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
