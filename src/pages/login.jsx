@@ -29,6 +29,7 @@ export default function LoginPage() {
         }
 
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", response.data.role || "user");
         toast.success("Login Successful");
 
         const destination =
@@ -61,6 +62,7 @@ export default function LoginPage() {
         { email: email.trim(), password }
       );
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("role", response.data.role || "user");
       toast.success("Login Successful");
 
       const destination =
